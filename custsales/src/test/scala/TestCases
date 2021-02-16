@@ -1,0 +1,28 @@
+
+Goal:
+    Reduce Shuffle.
+Approach:
+    per-node communication strategy (broadcast join, only applicable for small set of data -- spark.sql.autoBroadcastJoinThreshold (10 MB))
+    node-node communication strategy  (shuffle accross cluster)
+
+1. Small customer input file  -> Broadcast Join
+2. no Skew
+3. Skew   (disable broadcast join to test skew.. .set("spark.sql.autoBroadcastJoinThreshold", "-1"))
+
+Data Quality Check
+Spark 3 Adaptive query execution
+
+Broadcast Hashjoin
+
+Small Data:
+spark-submit --class com.krishna.spark.scala.batch.CustSales /Users/krishna/spark/spark-2.4.0-bin-hadoop2.7/bin/data/rest/custsales/target/uber-cust-sales-1.0-SNAPSHOT.jar "/Users/krishna/spark/spark-2.4.0-bin-hadoop2.7/bin/data/rest/custsales/src/main/resources/customers.csv" "/Users/krishna/spark/spark-2.4.0-bin-hadoop2.7/bin/data/rest/custsales/src/main/resources/sales.csv"
+
+Skewed data:
+spark-submit --class com.krishna.spark.scala.batch.CustSales /Users/krishna/spark/spark-2.4.0-bin-hadoop2.7/bin/data/rest/custsales/target/uber-cust-sales-1.0-SNAPSHOT.jar "/Users/krishna/spark/spark-2.4.0-bin-hadoop2.7/bin/data/rest/custsales/src/main/resources/customers.csv" "/Users/krishna/spark/spark-2.4.0-bin-hadoop2.7/bin/data/rest/custsales/src/main/resources/sales_skew.csv"
+
+Skewed data with Salt :
+spark-submit --class com.krishna.spark.scala.batch.CustSalesSkew /Users/krishna/spark/spark-2.4.0-bin-hadoop2.7/bin/data/rest/custsales/target/uber-cust-sales-1.0-SNAPSHOT.jar "/Users/krishna/spark/spark-2.4.0-bin-hadoop2.7/bin/data/rest/custsales/src/main/resources/customers.csv" "/Users/krishna/spark/spark-2.4.0-bin-hadoop2.7/bin/data/rest/custsales/src/main/resources/sales_skew.csv"
+
+
+
+
